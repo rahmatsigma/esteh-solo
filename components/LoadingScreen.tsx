@@ -17,7 +17,6 @@ export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
           className="fixed inset-0 z-[100] flex items-center justify-center bg-amber-50 overflow-hidden"
           exit={{ opacity: 0, transition: { duration: 0.6, ease: "easeInOut" } }}
         >
-          {/* Efek Air */}
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{
@@ -31,8 +30,6 @@ export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
             }}
             className="absolute w-32 h-8 bg-amber-300/60 rounded-[100%] blur-sm"
           />
-
-          {/* Kontainer Utama Logo & Teks */}
           <motion.div
             className="relative flex items-center gap-3 z-10"
             initial={{ y: -500 }}
@@ -45,7 +42,6 @@ export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
             }}
             exit={{ scale: 6, opacity: 0, transition: { duration: 0.8 } }}
           >
-            {/* Ikon Gelas */}
             <motion.div
               exit={{ x: -150, y: -100, rotate: -45, opacity: 0 }}
               transition={{ duration: 0.8 }}
@@ -53,7 +49,6 @@ export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
               <CupSoda size={56} className="text-amber-800" />
             </motion.div>
 
-            {/* Teks Logo */}
             <motion.h1
               className="text-4xl md:text-5xl font-extrabold tracking-wider text-amber-900"
               exit={{ x: 150, y: 100, rotate: 45, opacity: 0 }}
