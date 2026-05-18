@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Es-Teh S.O.L.O | Kesegaran Autentik",
+  title: "Es-Teh S.O.L.O",
   description: "Racikan es teh melati asli Solo yang wangi, sepet, legit, dan kental.",
 };
 

@@ -3,29 +3,82 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Star, Leaf, CupSoda, MapPin, Phone } from 'lucide-react';
 import LoadingScreen from '@/components/LoadingScreen';
+import CartDrawer from '@/components/CartDrawer';
 import { supabase } from '@/lib/supabase';
+
+interface CartItem {
+  id: number;
+  name: string;
+  price: string;
+  quantity: number;
+}
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<any[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
-    // Fungsi untuk mengambil data dari Supabase
     const fetchProducts = async () => {
       const { data, error } = await supabase.from('products').select('*');
       if (data) setProducts(data);
       if (error) console.error('Error fetching:', error);
       
-      // Matikan loading screen setelah data terambil
       setTimeout(() => setIsLoading(false), 2500);
     };
 
     fetchProducts();
   }, []);
 
+  const parsePrice = (priceStr: string) => {
+    return parseInt(priceStr.replace(/[^0-9]/g, ''));
+  };
+
+  const addToCart = (product: any) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item.id === product.id);
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prevCart, { id: product.id, name: product.name, price: product.price, quantity: 1 }];
+    });
+  };
+
+  const updateQuantity = (id: number, amount: number) => {
+    setCart((prevCart) =>
+      prevCart
+        .map((item) => {
+          if (item.id === id) {
+            const newQty = item.quantity + amount;
+            return newQty > 0 ? { ...item, quantity: newQty } : null;
+          }
+          return item;
+        })
+        .filter((item): item is CartItem => item !== null)
+    );
+  };
+
+  const clearCart = () => setCart([]);
+
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  const totalPrice = cart.reduce((total, item) => total + parsePrice(item.price) * item.quantity, 0);
+
   return (
     <>
       <LoadingScreen isLoading={isLoading} />
+      
+      {/* Panggil Komponen Keranjang yang Baru Dibuat */}
+      <CartDrawer 
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cart={cart}
+        updateQuantity={updateQuantity}
+        totalPrice={totalPrice}
+        clearCart={clearCart}
+      />
 
       <div className="min-h-screen bg-amber-50 font-sans text-slate-800">
         <nav className="bg-amber-800 text-amber-50 sticky top-0 z-50 shadow-md">
@@ -34,9 +87,18 @@ export default function Home() {
               <CupSoda size={28} className="text-amber-300" />
               <h1 className="text-2xl font-bold tracking-wider">Es-Teh S.O.L.O</h1>
             </div>
-            <button className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 px-4 py-2 rounded-full transition-colors font-medium">
+            
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className="relative flex items-center gap-2 bg-amber-600 hover:bg-amber-700 px-4 py-2 rounded-full transition-colors font-medium shadow-sm"
+            >
               <ShoppingBag size={20} />
-              <span className="hidden sm:inline">Pesan Sekarang</span>
+              <span className="hidden sm:inline">Keranjang</span>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold animate-pulse">
+                  {totalItems}
+                </span>
+              )}
             </button>
           </div>
         </nav>
@@ -75,7 +137,10 @@ export default function Home() {
                   <p className="text-slate-600 text-sm leading-relaxed">{product.description}</p>
                   <div className="pt-4 flex justify-between items-center border-t border-slate-100">
                     <span className="font-bold text-lg text-amber-700">{product.price}</span>
-                    <button className="bg-amber-100 text-amber-800 hover:bg-amber-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                    <button 
+                      onClick={() => addToCart(product)}
+                      className="bg-amber-100 text-amber-800 hover:bg-amber-800 hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors active:scale-95"
+                    >
                       <ShoppingBag size={18} />
                     </button>
                   </div>
@@ -94,11 +159,11 @@ export default function Home() {
             <div className="space-y-4 text-sm">
               <h5 className="text-lg font-bold text-amber-50">Kontak Kami</h5>
               <p className="flex items-center justify-center md:justify-start gap-2"><Phone size={16}/> +62 812-3456-7890</p>
-              <p className="flex items-center justify-center md:justify-start gap-2"><MapPin size={16}/> Jl. Slamet Riyadi No. 123, Solo</p>
+              <p className="flex items-center justify-center md:justify-start gap-2"><MapPin size={16}/>Ketintang, Kec. Gayungan, Surabaya, Jawa Timur</p>
             </div>
             <div className="space-y-4 text-sm">
               <h5 className="text-lg font-bold text-amber-50">Jam Buka</h5>
-              <p>Setiap Hari<br/>10.00 - 22.00 WIB</p>
+              <p>Senin - Jumat<br/>08.00 - 17.00 WIB</p>
             </div>
           </div>
           <div className="text-center mt-12 text-sm pt-8 border-t border-amber-900/50">
