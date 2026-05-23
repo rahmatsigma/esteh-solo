@@ -34,7 +34,11 @@ const overlayVariant: Variants = {
   exit: { clipPath: 'inset(0 0 100% 0)', transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } },
 };
 
-export default function Navbar() {
+interface NavbarProps {
+  onLogout?: () => void;
+}
+
+export default function Navbar({ onLogout }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -185,7 +189,7 @@ export default function Navbar() {
               ))}
             </motion.ul>
 
-            {/* Bottom row: socials + contact */}
+            {/* Bottom row: socials + contact + logout */}
             <motion.div
               className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 border-t"
               style={{ borderColor: 'rgba(200,151,58,0.15)' }}
@@ -207,17 +211,36 @@ export default function Navbar() {
                   </a>
                 ))}
               </div>
-              <div className="text-right">
-                <p className="text-xs tracking-widest uppercase mb-1" style={{ color: 'rgba(200,151,58,0.5)' }}>
-                  Kontak
-                </p>
-                <a
-                  href="tel:+6281234567890"
-                  className="text-sm font-medium"
-                  style={{ color: 'rgba(245,234,216,0.7)' }}
-                >
-                  +62 812-3456-7890
-                </a>
+              <div className="text-right flex flex-col gap-4 items-end">
+                <div>
+                  <p className="text-xs tracking-widest uppercase mb-1" style={{ color: 'rgba(200,151,58,0.5)' }}>
+                    Kontak
+                  </p>
+                  <a
+                    href="tel:+6281234567890"
+                    className="text-sm font-medium"
+                    style={{ color: 'rgba(245,234,216,0.7)' }}
+                  >
+                    +62 812-3456-7890
+                  </a>
+                </div>
+                {onLogout && (
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      onLogout();
+                    }}
+                    className="text-sm font-semibold tracking-widest uppercase px-4 py-2 rounded-lg transition-colors duration-200"
+                    style={{ 
+                      color: '#0d0904',
+                      backgroundColor: '#c8973a',
+                    }}
+                    onMouseEnter={(e) => { (e.target as HTMLElement).style.backgroundColor = '#d4a84d'; }}
+                    onMouseLeave={(e) => { (e.target as HTMLElement).style.backgroundColor = '#c8973a'; }}
+                  >
+                    Logout
+                  </button>
+                )}
               </div>
             </motion.div>
           </motion.div>
