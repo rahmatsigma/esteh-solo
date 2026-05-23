@@ -95,7 +95,7 @@ export default function AboutSection() {
         </div>
 
         {/* Right: stats mini-cards */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 w-full max-w-md mx-auto md:max-w-none md:place-self-center md:w-5/6 lg:w-3/4">
           {[
             { num: '100%', label: 'Bahan Alami' },
             { num: '50+', label: 'Varian Rasa' },
