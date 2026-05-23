@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import Link from 'next/link';
 
 function MagneticButton({ children, href }: { children: React.ReactNode; href: string }) {
   const btnRef = useRef<HTMLAnchorElement>(null);
@@ -156,17 +157,17 @@ export default function CTASection() {
           viewport={{ once: true, amount: 0.5 }}
           transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <MagneticButton href="#menu">Pesan via WhatsApp</MagneticButton>
+          <MagneticButton href="/menu">Pesan Sekarang</MagneticButton>
 
-          <a
-            href="#bento"
+          <Link
+            href="/menu"
             className="text-sm tracking-widest uppercase underline underline-offset-4 transition-colors duration-200"
             style={{ color: 'rgba(245,234,216,0.4)', letterSpacing: '0.1em' }}
             onMouseEnter={(e) => { (e.target as HTMLElement).style.color = '#c8973a'; }}
             onMouseLeave={(e) => { (e.target as HTMLElement).style.color = 'rgba(245,234,216,0.4)'; }}
           >
-            Lihat Menu Dulu
-          </a>
+            Lihat Menu
+          </Link>
         </motion.div>
 
         {/* Trust badges */}

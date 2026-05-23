@@ -81,7 +81,7 @@ export default function AdminDashboardPage() {
     const payload = {
       name: formData.name,
       description: formData.description,
-      price: parseFloat(formData.price),
+      price: Number(String(formData.price).replace(/[^0-9]/g, '')),
       image: formData.image,
     };
 
@@ -227,7 +227,7 @@ export default function AdminDashboardPage() {
                       <div className="text-sm text-amber-700/80 line-clamp-2">{product.description}</div>
                     </td>
                     <td className="p-4 font-semibold text-amber-900">
-                      Rp {product.price.toLocaleString('id-ID')}
+                      Rp {Number(String(product.price).replace(/[^0-9]/g, '')).toLocaleString('id-ID')}
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-center gap-2">

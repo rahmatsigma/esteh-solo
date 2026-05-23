@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { useScroll, useTransform, useMotionValueEvent, motion } from 'framer-motion';
+import Link from 'next/link';
 import Preloader from './Preloader';
 
 const TOTAL_FRAMES = 240;
@@ -111,8 +112,8 @@ const textBeats: TextBeat[] = [
         <p className="text-base font-light" style={{ color: 'rgba(245,234,216,0.55)' }}>
           Bergabung bersama ribuan pelanggan setia Es Teh Solo.
         </p>
-        <a
-          href="#cta"
+        <Link
+          href="/menu"
           className="inline-block px-10 py-4 font-bold text-sm tracking-widest uppercase transition-all duration-300 hover:scale-105"
           style={{
             background: '#c8973a',
@@ -124,7 +125,7 @@ const textBeats: TextBeat[] = [
           onMouseLeave={(e) => { (e.target as HTMLElement).style.background = '#c8973a'; }}
         >
           Pesan Sekarang
-        </a>
+        </Link>
       </div>
     ),
   },
