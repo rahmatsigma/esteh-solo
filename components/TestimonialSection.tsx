@@ -88,7 +88,7 @@ export default function TestimonialSection() {
           className="text-[40vw] font-black opacity-[0.018] leading-none"
           style={{ color: '#c8973a' }}
         >
-          "
+          &quot;
         </span>
       </div>
 

@@ -166,7 +166,7 @@ export default function BentoSection() {
                   className="text-xl md:text-2xl font-light italic text-center leading-relaxed"
                   style={{ color: 'rgba(245,234,216,0.7)' }}
                 >
-                  <span style={{ color: '#c8973a', fontSize: '3rem', lineHeight: 0.5, verticalAlign: 'bottom' }}>"</span>
+                  <span style={{ color: '#c8973a', fontSize: '3rem', lineHeight: 0.5, verticalAlign: 'bottom' }}>&quot;</span>
                   <br />
                   {card.quote?.replace(/^"|"$/g, '')}
                 </blockquote>
