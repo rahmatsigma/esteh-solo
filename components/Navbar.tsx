@@ -8,7 +8,7 @@ const navLinks = [
   { label: 'Tentang Kami', href: '#about' },
   { label: 'Menu', href: '#bento' },
   { label: 'Testimoni', href: '#testimonial' },
-  { label: 'Pesan Sekarang', href: '#cta' },
+  { label: 'Pesan Sekarang', href: '/menu' },
 ];
 
 const socials = [
@@ -57,8 +57,12 @@ export default function Navbar({ onLogout }: NavbarProps) {
   const handleLinkClick = (href: string) => {
     setOpen(false);
     setTimeout(() => {
-      const el = document.querySelector(href);
-      el?.scrollIntoView({ behavior: 'smooth' });
+      if (href.startsWith('#')) {
+        const el = document.querySelector(href);
+        el?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.href = href;
+      }
     }, 700);
   };
 
