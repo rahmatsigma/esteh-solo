@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+import Link from 'next/link';
 
 const navLinks = [
   { label: 'Tentang Kami', href: '#about' },
@@ -16,18 +17,18 @@ const socials = [
   { label: 'WhatsApp', href: '#' },
 ];
 
-const stagger = {
+const stagger: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.08 } },
 };
 
-const linkVariant = {
+const linkVariant: Variants = {
   hidden: { y: '100%', opacity: 0 },
   show: { y: '0%', opacity: 1, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
   exit: { y: '-100%', opacity: 0, transition: { duration: 0.4, ease: [0.76, 0, 0.24, 1] } },
 };
 
-const overlayVariant = {
+const overlayVariant: Variants = {
   hidden: { clipPath: 'inset(0 0 100% 0)' },
   show: { clipPath: 'inset(0 0 0% 0)', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } },
   exit: { clipPath: 'inset(0 0 100% 0)', transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } },
@@ -79,7 +80,7 @@ export default function Navbar() {
         />
 
         {/* Logo */}
-        <a
+        <Link
           href="/"
           className="relative z-10 text-xl font-black tracking-tight leading-none"
           style={{ color: '#f5ead8' }}
@@ -88,7 +89,7 @@ export default function Navbar() {
           <span className="text-xs font-medium tracking-widest ml-2 opacity-60" style={{ color: '#c8b99a' }}>
             SOLO
           </span>
-        </a>
+        </Link>
 
         {/* Hamburger */}
         <button
