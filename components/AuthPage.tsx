@@ -1,32 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
 import { CupSoda } from 'lucide-react';
 
 interface AuthPageProps {
   onAuthSuccess?: () => void;
 }
 
-type AuthMode = 'login' | 'register';
-
 export default function AuthPage({ onAuthSuccess }: AuthPageProps) {
-  const [mode, setMode] = useState<AuthMode>('login');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [registeredEmail, setRegisteredEmail] = useState('');
-
-  const handleSwitchToLogin = (email?: string) => {
-    setMode('login');
-    if (email) {
-      setRegisteredEmail(email);
-      setSuccessMessage('Registrasi berhasil! Silakan login dengan email Anda.');
-      // Clear success message after 5 seconds
-      setTimeout(() => setSuccessMessage(''), 5000);
-    }
-  };
-
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 flex items-center justify-center p-4">
       {/* Decorative elements */}
@@ -78,36 +61,7 @@ export default function AuthPage({ onAuthSuccess }: AuthPageProps) {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <AnimatePresence mode="wait">
-            {mode === 'login' ? (
-              <motion.div
-                key="login"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <LoginForm
-                  onSwitchToRegister={() => setMode('register')}
-                  onLoginSuccess={onAuthSuccess}
-                  prefilledEmail={registeredEmail}
-                  successMessage={successMessage}
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="register"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <RegisterForm
-                  onSwitchToLogin={handleSwitchToLogin}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <LoginForm onLoginSuccess={onAuthSuccess} />
         </motion.div>
 
         {/* Footer */}
@@ -117,7 +71,7 @@ export default function AuthPage({ onAuthSuccess }: AuthPageProps) {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center text-amber-600 text-xs mt-8"
         >
-          Dengan melanjutkan, Anda menyetujui Syarat & Ketentuan kami
+          Admin Portal - Es Teh Solo
         </motion.p>
       </div>
     </div>
