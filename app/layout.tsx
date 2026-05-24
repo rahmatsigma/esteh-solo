@@ -9,12 +9,12 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Es Teh Solo — Authentic Javanese Iced Tea",
+  title: "Es Teh S.O.L.O",
   description:
     "Racikan es teh melati asli Solo yang wangi, sepet, legit, dan kental. Crafted from the heart of Java since 2026.",
   keywords: ["es teh", "solo", "teh melati", "minuman tradisional", "iced tea indonesia"],
   openGraph: {
-    title: "Es Teh Solo",
+    title: "Es Teh S.O.L.O",
     description: "Authentic Javanese iced tea. Wangi, sepet, legit, kental.",
     type: "website",
   },

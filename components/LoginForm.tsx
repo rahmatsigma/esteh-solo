@@ -1,31 +1,19 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 interface LoginFormProps {
-  onSwitchToRegister: () => void;
   onLoginSuccess?: () => void;
-  prefilledEmail?: string;
-  successMessage?: string;
 }
 
-export default function LoginForm({ onSwitchToRegister, onLoginSuccess, prefilledEmail = '', successMessage = '' }: LoginFormProps) {
-  const [email, setEmail] = useState(prefilledEmail);
+export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(successMessage);
-
-  useEffect(() => {
-    setSuccess(successMessage);
-    if (successMessage) {
-      const timer = setTimeout(() => setSuccess(''), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,19 +75,10 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess, prefille
       <div className="space-y-8">
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center">
-          <h1 className="text-4xl font-bold text-amber-900 mb-2">Masuk</h1>
-          <p className="text-amber-700">Nikmati pengalaman Es Teh Solo yang istimewa</p>
+          <h1 className="text-4xl font-bold text-amber-900 mb-2">Masuk Admin</h1>
+          <p className="text-amber-700">Silakan login untuk mengakses dashboard</p>
         </motion.div>
 
-        {/* Success Message */}
-        {success && (
-          <motion.div
-            variants={itemVariants}
-            className="p-4 bg-green-100 border border-green-300 rounded-lg text-green-700 text-sm"
-          >
-            {success}
-          </motion.div>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email Input */}
           <motion.div variants={itemVariants} className="relative">
@@ -112,7 +91,7 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess, prefille
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="nama@example.com"
+                placeholder="admin@example.com"
                 required
                 className="w-full pl-12 pr-4 py-3 border-2 border-amber-200 rounded-lg focus:outline-none focus:border-amber-500 bg-amber-50 text-amber-900 placeholder-amber-500 transition"
               />
@@ -166,19 +145,6 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess, prefille
             )}
           </motion.button>
         </form>
-
-        {/* Switch to Register */}
-        <motion.div variants={itemVariants} className="text-center">
-          <p className="text-amber-700">
-            Belum punya akun?{' '}
-            <button
-              onClick={onSwitchToRegister}
-              className="font-semibold text-amber-600 hover:text-amber-700 transition underline"
-            >
-              Daftar sekarang
-            </button>
-          </p>
-        </motion.div>
       </div>
     </motion.div>
   );
