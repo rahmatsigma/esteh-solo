@@ -17,69 +17,69 @@ import { supabase } from '@/lib/supabase';
 type PageState = 'loading' | 'auth' | 'home';
 
 export default function Home() {
-  // const [pageState, setPageState] = useState<PageState>('loading');
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [pageState, setPageState] = useState<PageState>('loading');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // useEffect(() => {
-  //   // Check Supabase session on mount
-  //   const checkSession = async () => {
-  //     const { data: { session } } = await supabase.auth.getSession();
+  useEffect(() => {
+    // Check Supabase session on mount
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
       
-  //     if (session) {
-  //       setIsAuthenticated(true);
-  //       setPageState('home');
-  //     } else {
-  //       // Show loading screen for 2.5 seconds, then auth page
-  //       const timer = setTimeout(() => {
-  //         setPageState('auth');
-  //       }, 2500);
+      if (session) {
+        setIsAuthenticated(true);
+        setPageState('home');
+      } else {
+        // Show loading screen for 2.5 seconds, then auth page
+        const timer = setTimeout(() => {
+          setPageState('auth');
+        }, 2500);
 
-  //       return () => clearTimeout(timer);
-  //     }
-  //   };
+        return () => clearTimeout(timer);
+      }
+    };
 
-  //   checkSession();
+    checkSession();
 
-  //   // Listen for auth state changes
-  //   const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-  //     if (session) {
-  //       setIsAuthenticated(true);
-  //       setPageState('home');
-  //     } else if (event === 'SIGNED_OUT') {
-  //       setIsAuthenticated(false);
-  //       setPageState('auth');
-  //     }
-  //   });
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        setIsAuthenticated(true);
+        setPageState('home');
+      } else if (event === 'SIGNED_OUT') {
+        setIsAuthenticated(false);
+        setPageState('auth');
+      }
+    });
 
-  //   return () => subscription?.unsubscribe();
-  // }, []);
+    return () => subscription?.unsubscribe();
+  }, []);
 
-  // const handleAuthSuccess = () => {
-  //   setIsAuthenticated(true);
-  //   setPageState('home');
-  // };
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+    setPageState('home');
+  };
 
-  // const handleLogout = async () => {
-  //   await supabase.auth.signOut();
-  //   setIsAuthenticated(false);
-  //   setPageState('auth');
-  // };
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsAuthenticated(false);
+    setPageState('auth');
+  };
 
-  // // Render loading screen
-  // if (pageState === 'loading') {
-  //   return <LoadingScreen isLoading={true} />;
-  // }
+  // Render loading screen
+  if (pageState === 'loading') {
+    return <LoadingScreen isLoading={true} />;
+  }
 
-  // // Render auth page
-  // if (pageState === 'auth') {
-  //   return <AuthPage onAuthSuccess={handleAuthSuccess} />;
-  // }
+  // Render auth page
+  if (pageState === 'auth') {
+    return <AuthPage onAuthSuccess={handleAuthSuccess} />;
+  }
 
   // Render home page
   return (
     <LenisProvider>
       {/* Navbar — fixed, always on top */}
-      <Navbar />
+      <Navbar onLogout={handleLogout} />
 
       <main>
         {/* ── Hero: Image Sequence Scrollytelling ─── */}

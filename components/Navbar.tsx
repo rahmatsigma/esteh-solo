@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import Link from 'next/link';
+import { LogOut } from 'lucide-react';
+import LogoutConfirmModal from './LogoutConfirmModal';
 
 const navLinks = [
   { label: 'Tentang Kami', href: '#about' },
@@ -41,6 +43,8 @@ interface NavbarProps {
 export default function Navbar({ onLogout }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -64,6 +68,18 @@ export default function Navbar({ onLogout }: NavbarProps) {
         window.location.href = href;
       }
     }, 700);
+  };
+
+  const handleLogoutClick = async () => {
+    setIsLoggingOut(true);
+    try {
+      if (onLogout) {
+        await onLogout();
+      }
+    } finally {
+      setIsLoggingOut(false);
+      setShowLogoutConfirm(false);
+    }
   };
 
   return (
@@ -99,26 +115,48 @@ export default function Navbar({ onLogout }: NavbarProps) {
           </span>
         </Link>
 
-        {/* Hamburger */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="relative z-10 flex flex-col items-end gap-1.5 p-2 group"
-          aria-label="Toggle menu"
-          id="nav-menu-btn"
-        >
-          <motion.span
-            className="block h-px w-8 origin-right"
-            style={{ background: '#c8973a' }}
-            animate={open ? { rotate: -45, y: 4, width: '2rem' } : { rotate: 0, y: 0, width: '2rem' }}
-            transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
-          />
-          <motion.span
-            className="block h-px origin-right"
-            style={{ background: '#c8973a', width: '1.25rem' }}
-            animate={open ? { rotate: 45, y: -4, width: '2rem' } : { rotate: 0, y: 0, width: '1.25rem' }}
-            transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
-          />
-        </button>
+        {/* Right side: Logout + Hamburger */}
+        <div className="relative z-10 flex items-center gap-4">
+          {/* Logout Button */}
+          {onLogout && (
+            <motion.button
+              onClick={() => setShowLogoutConfirm(true)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors duration-200"
+              style={{
+                color: '#c8973a',
+                border: '1px solid rgba(200,151,58,0.3)',
+              }}
+              whileHover={{
+                backgroundColor: 'rgba(200,151,58,0.1)',
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <LogOut size={16} />
+              <span className="text-xs font-medium tracking-widest uppercase hidden sm:inline">Keluar</span>
+            </motion.button>
+          )}
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="relative flex flex-col items-end gap-1.5 p-2 group"
+            aria-label="Toggle menu"
+            id="nav-menu-btn"
+          >
+            <motion.span
+              className="block h-px w-8 origin-right"
+              style={{ background: '#c8973a' }}
+              animate={open ? { rotate: -45, y: 4, width: '2rem' } : { rotate: 0, y: 0, width: '2rem' }}
+              transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
+            />
+            <motion.span
+              className="block h-px origin-right"
+              style={{ background: '#c8973a', width: '1.25rem' }}
+              animate={open ? { rotate: 45, y: -4, width: '2rem' } : { rotate: 0, y: 0, width: '1.25rem' }}
+              transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
+            />
+          </button>
+        </div>
       </motion.nav>
 
       {/* Fullscreen Overlay */}
@@ -215,41 +253,30 @@ export default function Navbar({ onLogout }: NavbarProps) {
                   </a>
                 ))}
               </div>
-              <div className="text-right flex flex-col gap-4 items-end">
-                <div>
-                  <p className="text-xs tracking-widest uppercase mb-1" style={{ color: 'rgba(200,151,58,0.5)' }}>
-                    Kontak
-                  </p>
-                  <a
-                    href="tel:+6281234567890"
-                    className="text-sm font-medium"
-                    style={{ color: 'rgba(245,234,216,0.7)' }}
-                  >
-                    +62 812-3456-7890
-                  </a>
-                </div>
-                {onLogout && (
-                  <button
-                    onClick={() => {
-                      setOpen(false);
-                      onLogout();
-                    }}
-                    className="text-sm font-semibold tracking-widest uppercase px-4 py-2 rounded-lg transition-colors duration-200"
-                    style={{ 
-                      color: '#0d0904',
-                      backgroundColor: '#c8973a',
-                    }}
-                    onMouseEnter={(e) => { (e.target as HTMLElement).style.backgroundColor = '#d4a84d'; }}
-                    onMouseLeave={(e) => { (e.target as HTMLElement).style.backgroundColor = '#c8973a'; }}
-                  >
-                    Logout
-                  </button>
-                )}
+              <div className="text-right">
+                <p className="text-xs tracking-widest uppercase mb-1" style={{ color: 'rgba(200,151,58,0.5)' }}>
+                  Kontak
+                </p>
+                <a
+                  href="tel:+6281234567890"
+                  className="text-sm font-medium"
+                  style={{ color: 'rgba(245,234,216,0.7)' }}
+                >
+                  +62 812-3456-7890
+                </a>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Logout Confirmation Modal */}
+      <LogoutConfirmModal
+        isOpen={showLogoutConfirm}
+        onConfirm={handleLogoutClick}
+        onCancel={() => setShowLogoutConfirm(false)}
+        isLoading={isLoggingOut}
+      />
     </>
   );
 }
